@@ -1,8 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
+import { AppContext } from "../context/AppContext";
+import { assets } from "../assets/assets";
 
+// Navbar from "prebuiltui.com"
 const Navbar = () => {
   const [open, setOpen] = React.useState(false);
+  const { user, setUser, navigate } = useContext(AppContext);
   return (
     <nav className="flex items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 py-4 border-b border-gray-300 bg-white relative transition-all">
       <Link to={"/"}>
@@ -12,35 +16,26 @@ const Navbar = () => {
       {/* Desktop Menu */}
       <div className="hidden sm:flex items-center gap-8">
         {/* Home */}
-        <a href="#" className="relative overflow-hidden h-6 group">
+        <Link to="/" className="relative overflow-hidden h-6 group">
           <span className="block group-hover:-translate-y-full transition-transform duration-300">
             Home
           </span>
           <span className="block absolute top-full left-0 group-hover:translate-y-[-100%] transition-transform duration-300">
             Home
           </span>
-        </a>
+        </Link>
 
-        {/* About */}
-        <a href="#" className="relative overflow-hidden h-6 group">
+        {/* All Products */}
+        <Link to="/products" className="relative overflow-hidden h-6 group">
           <span className="block group-hover:-translate-y-full transition-transform duration-300">
-            About
+            All Products
           </span>
           <span className="block absolute top-full left-0 group-hover:translate-y-[-100%] transition-transform duration-300">
-            About
+            All Products
           </span>
-        </a>
+        </Link>
 
-        {/* Contact */}
-        <a href="#" className="relative overflow-hidden h-6 group">
-          <span className="block group-hover:-translate-y-full transition-transform duration-300">
-            Contact
-          </span>
-          <span className="block absolute top-full left-0 group-hover:translate-y-[-100%] transition-transform duration-300">
-            Contact
-          </span>
-        </a>
-
+        {/* Search Box */}
         <div className="hidden lg:flex items-center text-sm gap-2 border border-gray-300 px-3 rounded-full">
           <input
             className="py-1.5 w-full bg-transparent outline-none placeholder-gray-500"
@@ -57,54 +52,68 @@ const Navbar = () => {
             <path
               d="M10.836 10.615 15 14.695"
               stroke="#7A7B7D"
-              stroke-width="1.2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeWidth="1.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             />
             <path
-              clip-rule="evenodd"
+              clipRule="evenodd"
               d="M9.141 11.738c2.729-1.136 4.001-4.224 2.841-6.898S7.67.921 4.942 2.057C2.211 3.193.94 6.281 2.1 8.955s4.312 3.92 7.041 2.783"
               stroke="#7A7B7D"
-              stroke-width="1.2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeWidth="1.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             />
           </svg>
         </div>
 
+        {/* Cart Icon */}
         <div className="relative cursor-pointer">
-          <svg
-            width="18"
-            height="18"
-            viewBox="0 0 14 14"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M.583.583h2.333l1.564 7.81a1.17 1.17 0 0 0 1.166.94h5.67a1.17 1.17 0 0 0 1.167-.94l.933-4.893H3.5m2.333 8.75a.583.583 0 1 1-1.167 0 .583.583 0 0 1 1.167 0m6.417 0a.583.583 0 1 1-1.167 0 .583.583 0 0 1 1.167 0"
-              stroke="#615fff"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
+          <img src={assets.cart_icon} alt="" className="w-6 h-6" />
           <button className="absolute -top-2 -right-3 text-xs text-white bg-indigo-500 w-[18px] h-[18px] rounded-full">
             3
           </button>
         </div>
 
-        <div className="hidden ml-14 md:flex items-center gap-4">
+        {user ? (
+          <>
+            <div className="relative group">
+              <img
+                src={assets.profile_icon}
+                alt="profile"
+                className="w-10 rounded-full cursor-pointer"
+              />
+              <ul className="hidden group-hover:block absolute top-10 right-0 bg-white shadow-md rounded-md border border-gray-200 py-2 w-32 z-40 text-sm">
+                <li
+                  onClick={() => {
+                    navigate("/my-orders");
+                  }}
+                  className="p-1.5 hover:bg-gray-100 cursor-pointer"
+                >
+                  My Orders
+                </li>
+                <li
+                  onClick={() => setUser(null)}
+                  className="p-1.5 hover:bg-gray-100 cursor-pointer"
+                >
+                  Logout
+                </li>
+              </ul>
+            </div>
+          </>
+        ) : (
           <button className="border border-slate-600 hover:bg-slate-800 px-4 py-2 rounded-full text-sm font-medium transition">
             Login
           </button>
-        </div>
+        )}
       </div>
 
+      {/* Mobile Menu Toggle */}
       <button
-        onClick={() => (open ? setOpen(false) : setOpen(true))}
+        onClick={() => setOpen(!open)}
         aria-label="Menu"
         className="sm:hidden"
       >
-        {/* Menu Icon SVG */}
         <svg
           width="21"
           height="15"
@@ -124,20 +133,61 @@ const Navbar = () => {
           open ? "flex" : "hidden"
         } absolute top-[60px] left-0 w-full bg-white shadow-md py-4 flex-col items-start gap-2 px-5 text-sm md:hidden`}
       >
-        <a href="#" className="block">
-          Home
-        </a>
-        <a href="#" className="block">
-          About
-        </a>
-        <a href="#" className="block">
-          Contact
-        </a>
-        <div className="hidden ml-14 md:flex items-center gap-4">
+        {/* Home */}
+        <Link to="/" className="relative overflow-hidden h-6 group block">
+          <span className="block group-hover:-translate-y-full transition-transform duration-300">
+            Home
+          </span>
+          <span className="block absolute top-full left-0 group-hover:translate-y-[-100%] transition-transform duration-300">
+            Home
+          </span>
+        </Link>
+
+        {/* All Products */}
+        <Link
+          to="/products"
+          className="relative overflow-hidden h-6 group block"
+        >
+          <span className="block group-hover:-translate-y-full transition-transform duration-300">
+            All Products
+          </span>
+          <span className="block absolute top-full left-0 group-hover:translate-y-[-100%] transition-transform duration-300">
+            All Products
+          </span>
+        </Link>
+
+        {/* Mobile Login Button */}
+        {user ? (
+          <>
+            <div className="relative group">
+              <img
+                src={assets.profile_icon}
+                alt="profile"
+                className="w-10 rounded-full cursor-pointer"
+              />
+              <ul className="hidden group-hover:block absolute top-10 right-0 bg-white shadow-md rounded-md border border-gray-200 py-2 w-32 z-40 text-sm">
+                <li
+                  onClick={() => {
+                    navigate("/my-orders");
+                  }}
+                  className="p-1.5 hover:bg-gray-100 cursor-pointer"
+                >
+                  My Orders
+                </li>
+                <li
+                  onClick={() => setUser(null)}
+                  className="p-1.5 hover:bg-gray-100 cursor-pointer"
+                >
+                  Logout
+                </li>
+              </ul>
+            </div>
+          </>
+        ) : (
           <button className="border border-slate-600 hover:bg-slate-800 px-4 py-2 rounded-full text-sm font-medium transition">
             Login
           </button>
-        </div>
+        )}
       </div>
     </nav>
   );
