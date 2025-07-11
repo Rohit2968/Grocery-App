@@ -6,7 +6,7 @@ import { assets } from "../assets/assets";
 // Navbar from "prebuiltui.com"
 const Navbar = () => {
   const [open, setOpen] = React.useState(false);
-  const { user, setUser, navigate } = useContext(AppContext);
+  const { user, setUser, navigate, setShowUserLogin } = useContext(AppContext);
   return (
     <nav className="flex items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 py-4 border-b border-gray-300 bg-white relative transition-all">
       <Link to={"/"}>
@@ -67,8 +67,8 @@ const Navbar = () => {
           </svg>
         </div>
 
-        {/* Cart Icon */}
-        <div className="relative cursor-pointer">
+        {/* Car.t Icon */}
+        <div onClick={() => navigate("/cart")} className="relative cursor-pointer">
           <img src={assets.cart_icon} alt="" className="w-6 h-6" />
           <button className="absolute -top-2 -right-3 text-xs text-white bg-indigo-500 w-[18px] h-[18px] rounded-full">
             3
@@ -102,7 +102,7 @@ const Navbar = () => {
             </div>
           </>
         ) : (
-          <button className="border border-slate-600 hover:bg-slate-800 px-4 py-2 rounded-full text-sm font-medium transition">
+          <button onClick={() => setShowUserLogin(true)} className="border border-slate-600 hover:bg-slate-800 px-4 py-2 rounded-full text-sm font-medium transition">
             Login
           </button>
         )}
