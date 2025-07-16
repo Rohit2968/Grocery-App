@@ -1,22 +1,28 @@
-import React, { createContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 export const AppContext = createContext(null);
 
-const AppContextProvider = ({ children }) => {
+export const AppContextProvider = ({ children }) => {
   const navigate = useNavigate();
-  const [ user, setUser ] = useState(null);
-  const [isSeller, setIsSeller] = useState(null);
+  const [user, setUser] = useState(null);
+  const [isSeller, setIsSeller] = useState(false);
   const [showUserLogin, setShowUserLogin] = useState(false);
-  const value = { 
-    navigate, 
-    user, 
+  const [products, setProducts] = useState([]);
+  const [cartItems, setCartItems] = useState({});
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const value = {
+    navigate,
+    user,
     setUser,
-    isSeller, 
+    isSeller,
     setIsSeller,
     showUserLogin,
-    setShowUserLogin, 
- };
+    setShowUserLogin,
+  };
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
 
-export default AppContextProvider;
+export const useAppContext = () => {
+  return useContext(AppContext);
+};

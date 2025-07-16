@@ -1,66 +1,106 @@
-export default function Auth() {
+import { useState } from "react";
+import { useAppContext } from "../context/AppContext";
+import { toast } from "react-hot-toast";
+const Auth = () => {
+  const [state, setState] = useState("login");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { setShowUserLogin, setUser, axios, navigate } = useAppContext();
+
+  const handleSubmit = async (e) => {
+    try {
+      e.preventDefault();
+      const { data } = await axios.post(`/api/user/${state}`, {
+        name,
+        email,
+        password,
+      });
+      if (data.success) {
+        toast.success(data.message);
+        navigate("/");
+        setUser(data.user);
+        setShowUserLogin(false);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {}
+  };
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white text-gray-500 max-w-96 mx-4 md:p-6 p-4 text-left text-sm rounded-xl shadow-[0px_0px_10px_0px] shadow-black/10">
-        <h2 className="text-2xl font-semibold mb-6 text-center text-gray-800">
-          Welcome back
-        </h2>
-        <form>
-          <input
-            id="email"
-            className="w-full bg-transparent border my-3 border-gray-500/30 outline-none rounded-full py-2.5 px-4"
-            type="email"
-            placeholder="Enter your email"
-            required
-          />
-          <input
-            id="password"
-            className="w-full bg-transparent border mt-1 border-gray-500/30 outline-none rounded-full py-2.5 px-4"
-            type="password"
-            placeholder="Enter your password"
-            required
-          />
-          <div className="text-right py-4">
-            <a className="text-blue-600 underline" href="#">
-              Forgot Password
-            </a>
-          </div>
-          <button
-            type="submit"
-            className="w-full mb-3 bg-indigo-500 py-2.5 rounded-full text-white"
-          >
-            Log in
-          </button>
-        </form>
-        <p className="text-center mt-4">
-          Don’t have an account?{" "}
-          <a href="#" className="text-blue-500 underline">
-            Signup
-          </a>
+    <div
+      onClick={() => setShowUserLogin(false)}
+      className="fixed top-0 left-0 bottom-0 right-0 z-30 flex items-center justify-center  bg-black/50 text-gray-600"
+    >
+      <form
+        onSubmit={handleSubmit}
+        onClick={(e) => e.stopPropagation()}
+        className="flex flex-col gap-4 m-auto items-start p-8 py-12 w-80 sm:w-[352px] rounded-lg shadow-xl border border-gray-200 bg-white"
+      >
+        <p className="text-2xl font-medium m-auto">
+          <span className="text-indigo-500">User</span>{" "}
+          {state === "login" ? "Login" : "Register"}
         </p>
-        <button
-          type="button"
-          className="w-full flex items-center gap-2 justify-center mt-5 bg-black py-2.5 rounded-full text-white"
-        >
-          <img
-            className="h-4 w-4"
-            src="https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/login/appleLogo.png"
-            alt="appleLogo"
+        {state === "register" && (
+          <div className="w-full">
+            <p>Name</p>
+            <input
+              onChange={(e) => setName(e.target.value)}
+              value={name}
+              placeholder="type here"
+              className="border border-gray-200 rounded w-full p-2 mt-1 outline-indigo-500"
+              type="text"
+              required
+            />
+          </div>
+        )}
+        <div className="w-full ">
+          <p>Email</p>
+          <input
+            onChange={(e) => setEmail(e.target.value)}
+            value={email}
+            placeholder="type here"
+            className="border border-gray-200 rounded w-full p-2 mt-1 outline-indigo-500"
+            type="email"
+            required
           />
-          Log in with Apple
-        </button>
-        <button
-          type="button"
-          className="w-full flex items-center gap-2 justify-center my-3 bg-white border border-gray-500/30 py-2.5 rounded-full text-gray-800"
-        >
-          <img
-            className="h-4 w-4"
-            src="https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/login/googleFavicon.png"
-            alt="googleFavicon"
+        </div>
+        <div className="w-full ">
+          <p>Password</p>
+          <input
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
+            placeholder="type here"
+            className="border border-gray-200 rounded w-full p-2 mt-1 outline-indigo-500"
+            type="password"
+            required
           />
-          Log in with Apple
+        </div>
+        {state === "register" ? (
+          <p>
+            Already have account?{" "}
+            <span
+              onClick={() => setState("login")}
+              className="text-indigo-500 cursor-pointer"
+            >
+              click here
+            </span>
+          </p>
+        ) : (
+          <p>
+            Create an account?{" "}
+            <span
+              onClick={() => setState("register")}
+              className="text-indigo-500 cursor-pointer"
+            >
+              click here
+            </span>
+          </p>
+        )}
+        <button className="bg-indigo-500 hover:bg-indigo-600 transition-all text-white w-full py-2 rounded-md cursor-pointer">
+          {state === "register" ? "Create Account" : "Login"}
         </button>
-      </div>
+      </form>
     </div>
   );
-}
+};
+export default Auth;
