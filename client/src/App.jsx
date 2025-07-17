@@ -8,6 +8,7 @@ import Navbar from "./components/Navbar";
 import { AppContext } from "./context/AppContext";
 import MyOrders from "./pages/MyOrders";
 import Auth from "./models/Auth";
+import Footer from "./components/Footer";
 
 const App = () => {
   const { isSeller, showUserLogin } = useContext(AppContext);
@@ -26,6 +27,7 @@ const App = () => {
           <Route path="/my-orders" element={<MyOrders />} />
         </Routes>
       </div>
+      {isSellerPath ? null : <Footer />}
     </div>
   );
 };
