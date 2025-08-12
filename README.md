@@ -1,1 +1,2 @@
-A Grocery Website Using React and Node.js
+A Grocery Website where customers can buy and order vegetables, dairy products, etc.
+Built Using React and Node.js
