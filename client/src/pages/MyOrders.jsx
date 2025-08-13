@@ -3,6 +3,7 @@ import { dummyOrders } from "../assets/assets";
 import { AppContext } from "../context/AppContext";
 import toast from "react-hot-toast";
 
+// MyOrders 
 const MyOrders = () => {
   const [myOrders, setMyOrders] = useState([]);
   const { axios, user } = useContext(AppContext);
