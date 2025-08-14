@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+// AddressSchema in MongoDB
 const addressSchema = new mongoose.Schema({
   userId: { type: String, required: true },
   firstName: { type: String, required: true },
